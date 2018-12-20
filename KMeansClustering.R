@@ -2,7 +2,7 @@
 library(datasets)
 library(dplyr)
 
-#Create an IRIS Database
+#Store the IRIS Database
 db = iris
 
 #Basic Data Exploration
