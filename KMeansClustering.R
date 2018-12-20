@@ -24,7 +24,7 @@ set.seed(1)
 db$cluster_i = sample(1:k,len,replace=TRUE)
 db$cluster_f = rep(NA,nrow(db))
 
-#Initializing other relevant variables
+#Initialize other relevant variables
 nequal=1
 cm = data.frame(matrix(data=NA, nrow=k, ncol=4))
 cmn = data.frame(matrix(data=NA, nrow=k, ncol=5))
@@ -33,7 +33,7 @@ dist = rep(NA,k)
 #Loop until the initial and final clusters suggested are equal  
 while(nequal)
 { 
-  #Calculating the centroid of the clusters
+  #Calculate the centroid of the clusters
   for(i in 1:k)
   {
     cm[i,] = t(as.data.frame(colMeans(db[db$cluster_i==i,1:4])))
@@ -42,7 +42,7 @@ while(nequal)
   #If a cluster gets dropped fill its value with a very high number, so that no observation gets assigned to it
   cm[is.na(cm)] = 100000
   
-  #Calculating the distance of each point from all the different centroids
+  #Calculate the distance of each point from all the different centroids
   for(j in 1:nrow(db))
   {
     for(l in 1:k)
@@ -59,7 +59,7 @@ while(nequal)
   db$cluster_i=db$cluster_f
 }
 
-#Calculating the within cluster variation
+#Calculate the within cluster variation
 cmn[,5] = (data.frame(matrix(data=seq(1,k), nrow=k, ncol=1)))
 
 for(i in 1:k)
@@ -70,13 +70,13 @@ cmn[i,1:4] = t(as.data.frame(colMeans(db[db$cluster_i==i,1:4])))
 print(cmn)
 cmn[is.na(cmn)] = 100000
 
-#Merging centroid with database
+#Merge centroid with database
 colnames(cmn) = c("p1","p2","p3","p4","cluster_i")
 db = merge(db, cmn, by="cluster_i")
 
 print(head(db))
 
-#Calculating the sum of squared values
+#Calculate the sum of squared values
 db$ss = (db[,2]-db[,8])^2+(db[,3]-db[,9])^2+(db[,4]-db[,10])^2+(db[,5]-db[,11])^2
 
 wcv_ss = print(tapply(db$ss, db$cluster_i, sum))
@@ -89,7 +89,7 @@ return(sum(wcv_ss))
 
 wcv_ss = rep(NA,10)
 
-#Iterate for k values from 1 to 1, and then store the data in a data frame
+#Iterate for k values from 1 to 10, and then store the data in a data frame
 for(i in 1:10)
 {
   wcv_ss[i] = kmeans_clust(db,i)
